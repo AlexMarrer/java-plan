@@ -1,0 +1,32 @@
+.content__table {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 80%;
+    transform: translate(-50%, -50%);
+    background-color: #201E24;
+    border: 1px solid #437BDF;
+    border-radius: 22px;
+    overflow: hidden;
+}
+
+vaadin-grid::part(cell) {
+    text-align: center;
+    background-color: #201E24;
+}
+
+vaadin-grid::part(header-cell) {
+    border: 1px solid #437BDF;
+}
+
+vaadin-grid::part(body-cell) {
+    padding: 1rem 0;
+    border-inline: 1px solid #437BDF;
+}
+
+vaadin-grid::part(last-row-cell) {
+    border: 1px solid #437BDF;
+    border-bottom-right-radius: 22px;
+    border-bottom-left-radius: 22px;
+}

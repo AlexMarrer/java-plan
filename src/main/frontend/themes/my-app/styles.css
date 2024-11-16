@@ -1,4 +1,6 @@
+@import "theme-editor.css";
 @import url('./main-layout.css');
+@import url('./table.css');
 
 .main-content {
   background-color: #141218;
@@ -13,14 +15,4 @@
 
 .navbar__list {
   justify-content: center;
-}
-
-.content__table {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 80%;
-  transform: translate(-50%, -50%);
-  border-radius: 22px;
-  overflow: hidden;
 }
