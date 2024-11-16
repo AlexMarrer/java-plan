@@ -1,17 +1,9 @@
 package com.example.application.views;
 
-import com.vaadin.flow.component.grid.Grid;
-
 import com.vaadin.flow.component.tabs.Tabs;
-
 import com.vaadin.flow.component.tabs.Tab;
-
-import com.vaadin.flow.component.avatar.AvatarGroup;
-
-import com.vaadin.flow.component.avatar.AvatarGroup.AvatarGroupItem;
-
 import com.example.application.views.about.AboutView;
-import com.example.application.views.helloworld.HelloWorldView;
+import com.example.application.views.homepage.Home;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.html.Div;
@@ -22,39 +14,26 @@ import com.vaadin.flow.component.html.Nav;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.provider.*;
-import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.BoxSizing;
-import com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import com.vaadin.flow.theme.lumo.LumoUtility.Height;
-import com.vaadin.flow.theme.lumo.LumoUtility.ListStyleType;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import com.vaadin.flow.theme.lumo.LumoUtility.Overflow;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
-import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
-import com.vaadin.flow.theme.lumo.LumoUtility.Width;
+import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.flow.component.UI;
+import com.example.application.utilities.I18NProvider;
 
-import java.util.Collection;
+import java.util.Locale;
 
 /**
- * The main view is a top-level placeholder for other views.
+ * The main layout is a top-level placeholder for other views.
  */
 @Layout
 @AnonymousAllowed
 public class MainLayout extends VerticalLayout implements RouterLayout {
 
     private Div content;
+    private HasElement contentView;
 
     /**
      * A simple navigation item component, based on ListItem element.
@@ -120,12 +99,20 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         layout.add(appName);
 
         Tabs tabsLanguage = new Tabs();
+
         Tab de = new Tab("Deutsch");
-        de.setId("de");
-        tabsLanguage.add(de);
         Tab en = new Tab("Englisch");
-        en.setId("en");
-        tabsLanguage.add(en);
+
+        de.setId(Locale.GERMAN.toLanguageTag());
+        en.setId(Locale.ENGLISH.toLanguageTag());
+
+        tabsLanguage.add(de, en);
+
+        tabsLanguage.addSelectedChangeListener(e -> {
+            var tabsId = e.getSelectedTab().getId().orElse(Locale.ENGLISH.toLanguageTag());
+            var language = getTabsLocale(tabsId);
+            switchLanguage(language);
+        });
 
         layout.add(tabsLanguage);
 
@@ -158,17 +145,42 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     }
 
     private MenuItemInfo[] createMenuItems() {
-        return new MenuItemInfo[]{ //
-                new MenuItemInfo("Hello World", LineAwesomeIcon.GLOBE_SOLID.create(), HelloWorldView.class), //
-                new MenuItemInfo("About", LineAwesomeIcon.FILE.create(), AboutView.class), //
+        return new MenuItemInfo[]{
+                new MenuItemInfo("Hello World", LineAwesomeIcon.GLOBE_SOLID.create(), Home.class),
+                new MenuItemInfo("About", LineAwesomeIcon.FILE.create(), AboutView.class),
         };
+    }
+
+    private Locale getTabsLocale(String lang) {
+        return Locale.forLanguageTag(lang);
+    }
+
+    public void switchLanguage(Locale locale) {
+        // Set the new locale
+        getUI().ifPresent(ui -> {
+            ui.setLocale(locale);
+            // Refresh the UI components to reflect the new locale
+            ui.access(this::updateTexts);
+        });
+    }
+
+    private void updateTexts() {
+        // Update other components as needed
+        if (this.contentView == null) {
+            return;
+        }
+
+        if (this.contentView instanceof Home) {
+            ((Home) this.contentView).updateTexts();
+        }
     }
 
     @Override
     public void showRouterLayoutContent(HasElement content) {
+        this.contentView = content;
+
         RouterLayout.super.showRouterLayoutContent(content);
         this.content.removeAll();
-
         this.content.getElement().appendChild(content.getElement());
     }
 
