@@ -5,7 +5,6 @@ import com.example.application.views.MainLayout;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinRequest;
-import com.vaadin.flow.server.VaadinService;
 
 public class MyUI extends UI {
     @Override

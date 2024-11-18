@@ -4,9 +4,7 @@ import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.UI;
 
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -18,7 +16,7 @@ import java.util.Locale;
 @PageTitle("Home")
 @Route("")
 @Menu(order = 0, icon = "line-awesome/svg/globe-solid.svg")
-public class Home extends HorizontalLayout {
+public class HomeView extends HorizontalLayout {
 
     private Grid<MainLayout.DataEntity> table;
 
@@ -30,7 +28,7 @@ public class Home extends HorizontalLayout {
     private Grid.Column<MainLayout.DataEntity> saturdayColumn;
     private Grid.Column<MainLayout.DataEntity> sundayColumn;
 
-    public Home() {
+    public HomeView() {
         createTable();
         add(this.table);
         addClassName(LumoUtility.Height.FULL);

@@ -1,9 +1,14 @@
 package com.example.application.views;
 
+import com.example.application.views.account.AccountView;
+import com.example.application.views.homepage.HomeView;
+import com.example.application.views.plan.PlanView;
+import com.example.application.views.settings.SettingsView;
+
+import com.example.application.views.workout.WorkoutView;
+import com.vaadin.flow.component.icon.SvgIcon;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.Tab;
-import com.example.application.views.about.AboutView;
-import com.example.application.views.homepage.Home;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.html.Div;
@@ -16,12 +21,11 @@ import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Layout;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 import com.vaadin.flow.router.RouterLayout;
-import com.vaadin.flow.component.UI;
-import com.example.application.utilities.I18NProvider;
 
 import java.util.Locale;
 
@@ -145,9 +149,16 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     }
 
     private MenuItemInfo[] createMenuItems() {
+        StreamResource iconResource = new StreamResource("barbell.svg",
+                () -> getClass().getResourceAsStream("/icons/barbell.svg"));
+        SvgIcon icon = new SvgIcon(iconResource);
+
         return new MenuItemInfo[]{
-                new MenuItemInfo("Hello World", LineAwesomeIcon.GLOBE_SOLID.create(), Home.class),
-                new MenuItemInfo("About", LineAwesomeIcon.FILE.create(), AboutView.class),
+                new MenuItemInfo("Home", LineAwesomeIcon.HOME_SOLID.create(), HomeView.class),
+                new MenuItemInfo("Workout", icon, WorkoutView.class),
+                new MenuItemInfo("Plan", LineAwesomeIcon.LIST_UL_SOLID.create(), PlanView.class),
+                new MenuItemInfo("Settings", LineAwesomeIcon.COG_SOLID.create(), SettingsView.class),
+                new MenuItemInfo("Account", LineAwesomeIcon.USER.create(), AccountView.class),
         };
     }
 
@@ -170,8 +181,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
             return;
         }
 
-        if (this.contentView instanceof Home) {
-            ((Home) this.contentView).updateTexts();
+        if (this.contentView instanceof HomeView) {
+            ((HomeView) this.contentView).updateTexts();
         }
     }
 

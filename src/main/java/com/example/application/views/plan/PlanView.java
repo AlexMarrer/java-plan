@@ -1,4 +1,4 @@
-package com.example.application.views.about;
+package com.example.application.views.plan;
 
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
@@ -9,12 +9,12 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 
-@PageTitle("About")
-@Route("about")
+@PageTitle("Plan")
+@Route("plan")
 @Menu(order = 1, icon = "line-awesome/svg/file.svg")
-public class AboutView extends VerticalLayout {
+public class PlanView extends VerticalLayout {
 
-    public AboutView() {
+    public PlanView() {
         setSpacing(false);
 
         Image img = new Image("images/empty-plant.png", "placeholder plant");
