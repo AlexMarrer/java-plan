@@ -150,15 +150,26 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
 
     private MenuItemInfo[] createMenuItems() {
         StreamResource iconResource = new StreamResource("barbell.svg",
-                () -> getClass().getResourceAsStream("/icons/barbell.svg"));
-        SvgIcon icon = new SvgIcon(iconResource);
+                () -> getClass().getResourceAsStream("/META-INF/resources/icons/barbell.svg"));
 
-        return new MenuItemInfo[]{
-                new MenuItemInfo("Home", LineAwesomeIcon.HOME_SOLID.create(), HomeView.class),
-                new MenuItemInfo("Workout", icon, WorkoutView.class),
-                new MenuItemInfo("Plan", LineAwesomeIcon.LIST_UL_SOLID.create(), PlanView.class),
-                new MenuItemInfo("Settings", LineAwesomeIcon.COG_SOLID.create(), SettingsView.class),
-                new MenuItemInfo("Account", LineAwesomeIcon.USER.create(), AccountView.class),
+        var homeIcon = LineAwesomeIcon.HOME_SOLID.create();
+        var workoutIcon = new SvgIcon(iconResource);
+        var planIcon = LineAwesomeIcon.LIST_UL_SOLID.create();
+        var settingsIcon = LineAwesomeIcon.COG_SOLID.create();
+        var accountIcon = LineAwesomeIcon.USER.create();
+
+        homeIcon.addClassNames("navbar__icon");
+        workoutIcon.addClassNames("navbar__icon");
+        planIcon.addClassNames("navbar__icon");
+        settingsIcon.addClassNames("navbar__icon");
+        accountIcon.addClassNames("navbar__icon");
+
+        return new MenuItemInfo[] {
+                new MenuItemInfo("Home", homeIcon, HomeView.class),
+                new MenuItemInfo("Workout", workoutIcon, WorkoutView.class),
+                new MenuItemInfo("Plan", planIcon, PlanView.class),
+                new MenuItemInfo("Settings", settingsIcon, SettingsView.class),
+                new MenuItemInfo("Account", accountIcon, AccountView.class),
         };
     }
 

@@ -1,6 +1,7 @@
 package com.example.application.views.homepage;
 
 import com.example.application.views.MainLayout;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.UI;
 
@@ -11,6 +12,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import com.example.application.utilities.I18NProvider;
+import org.vaadin.lineawesome.LineAwesomeIcon;
+
 import java.util.Locale;
 
 @PageTitle("Home")
@@ -50,6 +53,17 @@ public class HomeView extends HorizontalLayout {
 
         this.table.setItems(new MainLayout.DataEntity("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"));
         this.table.addClassNames("content__table", LumoUtility.AlignSelf.END);
+
+        Button button = new Button();
+        var buttonIcon = LineAwesomeIcon.PLUS_CIRCLE_SOLID.create();
+        buttonIcon.setSize("2.5rem");
+        button.addClickListener(clickEvent -> {
+        });
+
+        button.setIcon(buttonIcon);
+        button.addClassNames("table__add-button");
+
+        add(button);
     }
 
     public void updateTexts() {

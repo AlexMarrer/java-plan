@@ -11,6 +11,14 @@
     overflow: hidden;
 }
 
+.table__add-button {
+    position: absolute;
+    height: 3.5rem;
+    width: 3.5rem;
+    right: 5%;
+    bottom: 10%;
+}
+
 vaadin-grid::part(cell) {
     text-align: center;
     background-color: #201E24;

@@ -1,0 +1,28 @@
+.navbar__icon {
+    height: 22px;
+    width: 22px;
+}
+
+header nav {
+    height: 100%;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+header nav ul {
+    gap: 2.5rem !important;
+}
+
+header nav li {
+    align-content: center;
+}
+
+header nav a {
+    display: flex;
+    flex-direction: column;
+    height: fit-content !important;
+}
+
+header nav a span {
+    font-size: 12px !important;
+}

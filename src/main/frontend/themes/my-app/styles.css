@@ -1,6 +1,7 @@
 @import "theme-editor.css";
 @import url('./main-layout.css');
 @import url('./table.css');
+@import url('./navbar.css');
 
 .main-content {
   background-color: #141218;
