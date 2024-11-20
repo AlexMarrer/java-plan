@@ -1,3 +1,14 @@
+.header {
+    Display: flex;
+    justify-content: center;
+    height: 4rem;
+    background-color: #1F1F1F;
+}
+
+.navbar__list {
+    justify-content: center;
+}
+
 .navbar__icon {
     height: 22px;
     width: 22px;
@@ -21,6 +32,11 @@ header nav a {
     display: flex;
     flex-direction: column;
     height: fit-content !important;
+    color: #A6A7A9 !important;
+}
+
+header nav a[highlight] {
+    color: white !important;
 }
 
 header nav a span {
