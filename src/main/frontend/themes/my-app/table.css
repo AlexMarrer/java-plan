@@ -34,12 +34,14 @@ vaadin-grid:has(vaadin-grid-column.current-day) {
 
 vaadin-grid:has(vaadin-grid-column.current-day)::part(header-cell) {
     background-color: rgb(67, 123, 223, 5%) !important;
+    backdrop-filter: blur(10px);
 }
 
 vaadin-grid {
     height: 100%;
     margin-left: -1px;
     margin-top: -1px;
+    background-color: rgba(15, 31, 52, 50);
 }
 
 vaadin-grid::part(cell) {
@@ -59,7 +61,8 @@ vaadin-grid::part(body-cell) {
 }
 
 vaadin-grid::part(last-row-cell) {
-    border: 1px solid rgb(67, 123, 223);
+    border-inline: 1px solid rgb(67, 123, 223);
+    border-bottom: 1px solid rgb(67, 123, 223);
     border-bottom-right-radius: 11px;
     border-bottom-left-radius: 11px;
 }

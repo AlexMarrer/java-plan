@@ -2,16 +2,25 @@ package com.example.application.component;
 
 import com.example.application.utilities.Exercise;
 import com.example.application.utilities.I18NProvider;
+import com.example.application.utilities.TableView;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
+import com.vaadin.flow.component.page.WebStorage;
+import com.vaadin.flow.component.select.Select;
+import org.vaadin.lineawesome.LineAwesomeIcon;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class CalendarTable {
+
+    private Select<TableView> tableView = new Select<>();
+    private String standardViewValue = "WEEKLY";
+    private Button addExerciseButton;
 
     private List<Grid<Exercise>> dayGrids = new ArrayList<>();
     private Exercise draggedExercise;
@@ -30,6 +39,22 @@ public class CalendarTable {
             Grid<Exercise> dayGrid = createDayGrid(day);
             this.dayGrids.add(dayGrid);
         }
+        try {
+            WebStorage.getItem("standardViewValue").thenAccept(value -> {
+                UI ui = UI.getCurrent();
+
+                ui.access(() -> {
+                    this.standardViewValue = value == null ? "WEEKLY" : value;
+
+                    createTableViewSelection();
+                });
+            });
+        } catch (Exception e) {
+            this.standardViewValue = "WEEKLY";
+            createTableViewSelection();
+        }
+        createExerciseAddButton();
+
         updateTexts();
         setCurrentDate();
 
@@ -37,6 +62,33 @@ public class CalendarTable {
         setupInDayReordering();
 
         return this.dayGrids;
+    }
+
+    public Select<TableView> getTableView() {
+        return this.tableView;
+    }
+
+    public Button getAddExerciseButton() {
+        return this.addExerciseButton;
+    }
+
+    private void createTableViewSelection() {
+        this.tableView.setItems(
+                new TableView(I18NProvider.getTranslation("TABLE.WEEKLY"), "WEEKLY"),
+                new TableView(I18NProvider.getTranslation("TABLE.THREE-DAYS"), "THREE-DAYS"),
+                new TableView(I18NProvider.getTranslation("TABLE.DAY"), "DAY")
+        );
+        this.tableView.setValue(new TableView(I18NProvider.getTranslation("TABLE."+this.standardViewValue), this.standardViewValue));
+        this.tableView.setItemLabelGenerator(TableView::label);
+        this.tableView.setItemEnabledProvider(TableView::enabled);
+        this.tableView.setLabel(I18NProvider.getTranslation("TABLE.VIEW-HEADER"));
+
+        this.tableView.addValueChangeListener(event -> {
+            if(event.getValue() != null) {
+                this.standardViewValue = event.getValue().value();
+                WebStorage.setItem("standardViewValue", this.standardViewValue);
+            }
+        });
     }
 
     private void setCurrentDate() {
@@ -50,13 +102,24 @@ public class CalendarTable {
         }
     }
 
+    private void createExerciseAddButton() {
+        this.addExerciseButton = new Button();
+        var buttonIcon = LineAwesomeIcon.PLUS_CIRCLE_SOLID.create();
+        buttonIcon.setSize("2.5rem");
+        this.addExerciseButton.addClickListener(clickEvent -> {
+        });
+
+        this.addExerciseButton.setIcon(buttonIcon);
+        this.addExerciseButton.addClassNames("table__add-button");
+    }
+
     public void updateTexts() {
-        Locale locale = UI.getCurrent().getLocale();
+        createTableViewSelection();
 
         for (Grid<Exercise> dayGrid : this.dayGrids) {
             dayGrid.getColumns().forEach( header -> {
                 if(Arrays.asList(days).contains(header.getId().orElse("none"))) {
-                    header.setHeader(I18NProvider.getTranslation("TABLE." + header.getId().orElse("none"), locale));
+                    header.setHeader(I18NProvider.getTranslation("TABLE." + header.getId().orElse("none")));
                 }
             });
         }

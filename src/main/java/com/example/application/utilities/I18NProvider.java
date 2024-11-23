@@ -1,5 +1,7 @@
 package com.example.application.utilities;
 
+import com.vaadin.flow.component.UI;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -13,7 +15,8 @@ public class I18NProvider {
         return SUPPORTED_LOCALES;
     }
 
-    public static String getTranslation(String key, Locale locale) {
+    public static String getTranslation(String key) {
+        var locale = UI.getCurrent().getLocale();
         ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, locale);
         return bundle.getString(key);
     }
