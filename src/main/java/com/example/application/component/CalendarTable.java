@@ -3,6 +3,7 @@ package com.example.application.component;
 import com.example.application.utilities.Exercise;
 import com.example.application.utilities.I18NProvider;
 import com.example.application.utilities.TableView;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -111,6 +112,12 @@ public class CalendarTable {
 
         this.addExerciseButton.setIcon(buttonIcon);
         this.addExerciseButton.addClassNames("table__add-button");
+
+        this.addExerciseButton.addClickListener(this::showAddExerciseView);
+    }
+
+    private void showAddExerciseView(ClickEvent<Button> clickEvent) {
+        
     }
 
     public void updateTexts() {
