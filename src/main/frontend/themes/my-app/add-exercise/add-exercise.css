@@ -1,0 +1,19 @@
+.add-exercise {
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    height: 90%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #437BDF;
+    background-color: rgb(39, 51, 72);
+    border-radius: 22px;
+    overflow: hidden;
+}
+
+.add-exercise-background {
+    z-index: -1;
+    position: fixed;
+    background-color: rgb(39 51 72 / 40%);
+}

@@ -22,9 +22,12 @@ public class CalendarTable {
     private Select<TableView> tableView = new Select<>();
     private String standardViewValue = "WEEKLY";
     private Button addExerciseButton;
+    private AddExercise addExercise = new AddExercise();
+    private boolean isAddExerciseOpen = false;
 
     private List<Grid<Exercise>> dayGrids = new ArrayList<>();
     private Exercise draggedExercise;
+    private int currentDay;
     private String[] days = {
             "MONDAY",
             "TUESDAY",
@@ -73,6 +76,10 @@ public class CalendarTable {
         return this.addExerciseButton;
     }
 
+    public AddExercise getAddExercise() {
+        return addExercise;
+    }
+
     private void createTableViewSelection() {
         this.tableView.setItems(
                 new TableView(I18NProvider.getTranslation("TABLE.WEEKLY"), "WEEKLY"),
@@ -83,17 +90,44 @@ public class CalendarTable {
         this.tableView.setItemLabelGenerator(TableView::label);
         this.tableView.setItemEnabledProvider(TableView::enabled);
         this.tableView.setLabel(I18NProvider.getTranslation("TABLE.VIEW-HEADER"));
+        this.tableView.addClassNames("table__view-selector");
 
         this.tableView.addValueChangeListener(event -> {
             if(event.getValue() != null) {
                 this.standardViewValue = event.getValue().value();
                 WebStorage.setItem("standardViewValue", this.standardViewValue);
             }
+
+            this.dayGrids.forEach(x -> {
+                x.removeClassNames("table__column--active");
+            });
+
+            var daysArray = this.dayGrids.toArray(new Grid[0]);
+
+            switch (this.standardViewValue) {
+                case "WEEKLY":
+                    for (Grid<Exercise> exerciseGrid : daysArray) {
+                        exerciseGrid.addClassName("table__column--active");
+                    }
+                    break;
+                case "THREE-DAYS":
+                    var startIndex = this.currentDay == 7 ? this.currentDay-2 : this.currentDay-1;
+                    for (int i = startIndex; i < startIndex+3; i++) {
+                        daysArray[i].addClassName("table__column--active");
+                    }
+                    break;
+                case "DAY":
+                    daysArray[this.currentDay].addClassName("table__column--active");
+                    break;
+                default:
+                    break;
+            }
         });
     }
 
     private void setCurrentDate() {
         var day = LocalDateTime.now().getDayOfWeek();
+        this.currentDay = day.ordinal();
         for (Grid<Exercise> dayGrid : this.dayGrids) {
             dayGrid.getColumns().forEach( header -> {
                 if(day.toString().equals(header.getId().orElse("none"))) {
@@ -117,7 +151,11 @@ public class CalendarTable {
     }
 
     private void showAddExerciseView(ClickEvent<Button> clickEvent) {
-        
+        if (isAddExerciseOpen) {
+            this.addExercise.deactivateAddExercise();
+        } else {
+            this.addExercise.activateAddExercise();
+        }
     }
 
     public void updateTexts() {
@@ -217,17 +255,17 @@ public class CalendarTable {
         // Dummy-Daten
         List<Exercise> exercises = new ArrayList<>();
         switch(day) {
-            case "montag":
+            case "MONDAY":
                 exercises.add(new Exercise("Squats", 3, 10, 4.5));
                 exercises.add(new Exercise("Bench Press", 3, 8, 4.5));
                 break;
-            case "dienstag":
+            case "WEDNESDAY":
                 exercises.add(new Exercise("Deadlifts", 3, 5, 4.5));
                 exercises.add(new Exercise("Pull-ups", 3, 10, 4.5));
                 break;
             default:
-                exercises.add(new Exercise("Sigma", 3, 10, 4.5));
-                exercises.add(new Exercise("Ligma Press", 3, 8, 4.5));
+                exercises.add(new Exercise("Nice", 3, 10, 4.5));
+                exercises.add(new Exercise("Try Press", 3, 8, 4.5));
                 break;
         }
         return exercises;

@@ -8,50 +8,60 @@ import com.vaadin.flow.component.charts.model.ListSeries;
 
 import com.vaadin.flow.component.avatar.Avatar;
 
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 
 @PageTitle("Account")
 @Route("account")
 @Menu(order = 1, icon = "line-awesome/svg/file.svg")
-public class AccountView extends VerticalLayout {
+public class AccountView extends HorizontalLayout {
 
     public AccountView() {
-        setSpacing(false);
+        Div chartDiv = new Div();
+        Chart chartVolume = new Chart(ChartType.LINE);
+        chartVolume.setMinHeight("200px");
+        chartVolume.getConfiguration().setTitle("Volume Progress");
+        chartVolume.getConfiguration().getxAxis().setCategories("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+        chartVolume.getConfiguration().getyAxis().setTitle("Volumen (KG)");
+        ListSeries listseriesVolume = new ListSeries("Volumen");
+        listseriesVolume.setData(42112, 58698, 12276, 33202, 74518, 45498, 42477, 17896, 44297, 22456, 38547, 12621);
+        chartVolume.getConfiguration().addSeries(listseriesVolume);
 
-        Image img = new Image("images/empty-plant.png", "placeholder plant");
-        img.setWidth("200px");
-        add(img);
-Chart chart = new Chart(ChartType.LINE);
-chart.setMinHeight("400px");
-chart.getConfiguration().setTitle("Sales 2023");
-chart.getConfiguration().getxAxis().setCategories("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
-chart.getConfiguration().getyAxis().setTitle("Euro (€)");
-ListSeries listseries = new ListSeries("Product A");
-listseries.setData(42112, 58698, 12276, 33202, 74518, 45498, 42477, 17896, 44297, 22456, 38547, 12621);
-chart.getConfiguration().addSeries(listseries);
-ListSeries listseries2 = new ListSeries("Product B");
-listseries2.setData(70972, 48589, 94434, 58270, 77282, 7108, 54085, 44401, 28868, 79643, 14383, 76036);
-chart.getConfiguration().addSeries(listseries2);
-Avatar avatar = new Avatar();
+        Chart chartWeight = new Chart(ChartType.LINE);
+        chartWeight.setMinHeight("200px");
+        chartWeight.getConfiguration().setTitle("Weight Progress");
+        chartWeight.getConfiguration().getxAxis().setCategories("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+        chartWeight.getConfiguration().getyAxis().setTitle("Gewicht (KG)");
+        ListSeries listseriesWeight = new ListSeries("Gewicht");
+        listseriesWeight.setData(42112, 58698, 12276, 33202, 74518, 45498, 42477, 17896, 44297, 22456, 38547, 12621);
+        chartWeight.getConfiguration().addSeries(listseriesWeight);
 
-        H2 header = new H2("This place intentionally left empty");
-        header.addClassNames(Margin.Top.XLARGE, Margin.Bottom.MEDIUM);
-add(chart);
-add(avatar);
-        add(header);
-        add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
+        Avatar avatar = new Avatar();
+
+        Div info = new Div();
+        Div weight = new Div();
+
+        chartDiv.addClassNames("account__chart");
+        avatar.addClassNames("account__avatar");
+        info.addClassNames("account__info");
+        weight.addClassNames("account__weight");
+
+        chartDiv.add(chartVolume);
+        weight.add(chartWeight);
+        add(info, weight, avatar, chartDiv);
+
+        addClassName("account-view");
 
         setSizeFull();
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-        getStyle().set("text-align", "center");
     }
 
 }

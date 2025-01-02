@@ -1,8 +1,10 @@
 @import "theme-editor.css";
-@import url('./main-layout.css');
-@import url('./table.css');
-@import url('./navbar.css');
+@import url('layout/main-layout.css');
+@import url('table/table.css');
+@import url('navbar/navbar.css');
+@import url('account/account.css');
 
 .main-content {
+  position: relative;
   background-color: #141218;
 }

@@ -26,9 +26,11 @@ public class HomeView extends HorizontalLayout {
         }
 
         var tableView = this.calendarTable.getTableView();
+        var addExerciseContainer = this.calendarTable.getAddExercise().getContainer();
+        var addExerciseBackground = this.calendarTable.getAddExercise().getBackground();
         var button = this.calendarTable.getAddExerciseButton();
 
-        add(tableWrapper, tableView, button);
+        add(tableWrapper, addExerciseContainer, tableView, button, addExerciseBackground);
 
         addClassName(LumoUtility.Height.FULL);
     }

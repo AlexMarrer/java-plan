@@ -1,7 +1,5 @@
 package com.example.application.views;
 
-import com.vaadin.flow.component.select.Select;
-
 import com.example.application.views.account.AccountView;
 import com.example.application.views.homepage.HomeView;
 import com.example.application.views.plan.PlanView;
@@ -135,7 +133,6 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         Nav nav = new Nav();
         nav.addClassNames(Display.FLEX, Overflow.AUTO, Padding.Horizontal.MEDIUM, Padding.Vertical.XSMALL);
 
-        // Wrap the links in a list; improves accessibility
         UnorderedList list = new UnorderedList();
         list.addClassNames(Display.FLEX, Gap.SMALL, ListStyleType.NONE, Margin.NONE, Padding.NONE, Width.FULL, "navbar__list");
         nav.add(list);
@@ -202,11 +199,11 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
     @Override
     public void showRouterLayoutContent(HasElement content) {
         this.contentView = content;
+        var className = content.getClass().getName().split("\\.");
 
         RouterLayout.super.showRouterLayoutContent(content);
         this.content.removeAll();
         this.content.getElement().appendChild(content.getElement());
+        this.content.addClassNames(className[className.length - 1]);
     }
-
-    public record DataEntity(String monday, String tuesday, String wednesday, String thursday, String friday, String saturday, String sunday) {}
 }

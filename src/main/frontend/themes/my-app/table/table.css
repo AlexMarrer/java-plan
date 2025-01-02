@@ -9,8 +9,8 @@
     top: 50%;
     left: 50%;
     gap: 0;
-    width: 80%;
-    height: 80%;
+    width: 90%;
+    height: 90%;
     transform: translate(-50%, -50%);
     border: 1px solid #437BDF;
     background-color: rgb(39, 51, 72);
@@ -20,12 +20,27 @@
 
 .table__add-button {
     position: absolute;
-    right: 5%;
+    right: 2.5rem;
     bottom: 10%;
     height: 3.5rem;
     width: 3.5rem;
+    background-color:  rgb(49 56 65 / 71%);
+    transition: 300ms ease-in-out;
+}
 
-    background-color:  rgba(192, 213, 242, 0.11);
+.table__add-button:hover {
+    cursor: pointer;
+    color: #437BDF;
+    background-color: rgba(26, 30, 35, 0.71);
+}
+
+.table__view-selector {
+    position: absolute;
+    bottom: 5%;
+}
+
+.table__column--active {
+    display: flex;
 }
 
 vaadin-grid:has(vaadin-grid-column.current-day) {
@@ -38,6 +53,7 @@ vaadin-grid:has(vaadin-grid-column.current-day)::part(header-cell) {
 }
 
 vaadin-grid {
+    display: none;
     height: 100%;
     margin-left: -1px;
     margin-top: -1px;
