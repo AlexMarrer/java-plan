@@ -10,6 +10,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
 import com.vaadin.flow.component.grid.dnd.GridDropLocation;
 import com.vaadin.flow.component.grid.dnd.GridDropMode;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.WebStorage;
 import com.vaadin.flow.component.select.Select;
 import org.vaadin.lineawesome.LineAwesomeIcon;
@@ -23,7 +24,6 @@ public class CalendarTable {
     private String standardViewValue = "WEEKLY";
     private Button addExerciseButton;
     private AddExercise addExercise = new AddExercise();
-    private boolean isAddExerciseOpen = false;
 
     private List<Grid<Exercise>> dayGrids = new ArrayList<>();
     private Exercise draggedExercise;
@@ -111,7 +111,7 @@ public class CalendarTable {
                     }
                     break;
                 case "THREE-DAYS":
-                    var startIndex = this.currentDay == 7 ? this.currentDay-2 : this.currentDay-1;
+                    var startIndex = this.currentDay == 6 ? this.currentDay-2 : this.currentDay-1;
                     for (int i = startIndex; i < startIndex+3; i++) {
                         daysArray[i].addClassName("table__column--active");
                     }
@@ -141,8 +141,6 @@ public class CalendarTable {
         this.addExerciseButton = new Button();
         var buttonIcon = LineAwesomeIcon.PLUS_CIRCLE_SOLID.create();
         buttonIcon.setSize("2.5rem");
-        this.addExerciseButton.addClickListener(clickEvent -> {
-        });
 
         this.addExerciseButton.setIcon(buttonIcon);
         this.addExerciseButton.addClassNames("table__add-button");
@@ -151,7 +149,7 @@ public class CalendarTable {
     }
 
     private void showAddExerciseView(ClickEvent<Button> clickEvent) {
-        if (isAddExerciseOpen) {
+        if (this.addExercise.isAddExerciseOpen()) {
             this.addExercise.deactivateAddExercise();
         } else {
             this.addExercise.activateAddExercise();
