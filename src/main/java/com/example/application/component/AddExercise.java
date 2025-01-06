@@ -4,11 +4,10 @@ import com.example.application.utilities.Exercise;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.textfield.TextField;
+import org.vaadin.addons.componentfactory.PaperSlider;
 
 import java.util.List;
 
@@ -27,6 +26,7 @@ public class AddExercise {
         this.container = new Div();
         this.container.addClassNames("add-exercise");
 
+        var selectContainer = new Div();
         Select<Exercise> select = new Select<>();
         select.setOverlayWidth("350px");
 
@@ -36,6 +36,10 @@ public class AddExercise {
         select.setItemLabelGenerator(Exercise::getName);
         select.setRequiredIndicatorVisible(true);
 
+        selectContainer.add(select);
+        selectContainer.addClassNames("select-container");
+
+        var exerciseAttributesContainer = new Div();
         IntegerField sets = new IntegerField();
         sets.setLabel("Sets");
         sets.setHelperText("Min 1 set");
@@ -62,19 +66,24 @@ public class AddExercise {
                 .setBadInputErrorMessage("Invalid number format")
                 .setMinErrorMessage("Quantity must be at least 1"));
 
+        exerciseAttributesContainer.add(sets, reps);
+        exerciseAttributesContainer.addClassNames("exercise-attributes-container");
+
         CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
         checkboxGroup.setLabel("Working days");
         checkboxGroup.setItems("Monday", "Tuesday", "Wednesday", "Thursday",
                 "Friday", "Saturday", "Sunday");
         checkboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
 
-        FormLayout formLayout = new FormLayout();
-        formLayout.add(select, sets, reps, checkboxGroup);
-        formLayout.setColspan(checkboxGroup, 3);
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1),
-                new FormLayout.ResponsiveStep("500px", 3));
+        PaperSlider slider = new PaperSlider();
+        slider.setMin(0);
+        slider.setMax(10);
+        slider.setValue(5);
+        slider.setPinned(true);
+        slider.setSnaps(true);
+        slider.setMaxMarkers(1);
 
-        this.container.add(formLayout);
+        this.container.add(selectContainer, exerciseAttributesContainer, checkboxGroup, slider);
 
         this.background.addClickListener(event -> deactivateAddExercise());
     }

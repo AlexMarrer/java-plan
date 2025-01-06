@@ -4,16 +4,23 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 90%;
-    height: 90%;
+    width: calc(90% - 2rem);
+    height: calc(90% - 2rem);
     transform: translate(-50%, -50%);
     background-color: rgb(31, 31, 31);
     border-radius: 22px;
     overflow: hidden;
+    padding: 1rem;
 }
 
 .add-exercise--active {
-    display: block;
+    display: grid;
+    grid-template:
+            "select" 1fr
+            "repsAndSets" 1fr
+            "date" 1fr
+            / 1fr;
+    gap: 1rem;
 }
 
 .add-exercise-background {
@@ -24,4 +31,33 @@
 
 .add-exercise-background--active {
     display: block;
+}
+
+.exercise-attributes-container {
+    grid-area: repsAndSets;
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - 4rem);
+}
+
+.select-container {
+    grid-area: select;
+}
+
+.exercise-attributes-container vaadin-integer-field,
+.select-container vaadin-select,
+vaadin-checkbox-group::part(label),
+vaadin-checkbox-group::part(group-field) {
+    padding: 0 2rem;
+}
+
+vaadin-checkbox-group::part(group-field) {
+    grid-area: date;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+vaadin-checkbox::part(label) {
+    transform: translateY(10px);
 }
