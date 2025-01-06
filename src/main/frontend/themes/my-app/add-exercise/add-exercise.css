@@ -7,8 +7,7 @@
     width: 90%;
     height: 90%;
     transform: translate(-50%, -50%);
-    border: 1px solid #437BDF;
-    background-color: rgb(39, 51, 72);
+    background-color: rgb(31, 31, 31);
     border-radius: 22px;
     overflow: hidden;
 }

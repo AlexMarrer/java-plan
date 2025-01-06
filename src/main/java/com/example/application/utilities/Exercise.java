@@ -1,5 +1,8 @@
 package com.example.application.utilities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Exercise {
     private String Day;
     private String name;
@@ -52,5 +55,16 @@ public class Exercise {
 
     public void setRpe(double rpe) {
         this.rpe = rpe;
+    }
+
+    public static List<Exercise> getExercises() {
+        var exercises = new ArrayList<Exercise>();
+        exercises.add(new Exercise("Bench", 5, 5, 7.5));
+        exercises.add(new Exercise("Squat", 5, 5, 7.5));
+        exercises.add(new Exercise("Chest Incline", 5, 5, 7.5));
+        exercises.add(new Exercise("Triceps Pulldown", 5, 5, 7.5));
+        exercises.add(new Exercise("Legcurl", 5, 5, 7.5));
+
+        return exercises;
     }
 }
