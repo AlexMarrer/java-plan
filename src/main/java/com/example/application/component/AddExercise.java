@@ -1,6 +1,7 @@
 package com.example.application.component;
 
 import com.example.application.utilities.Exercise;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
@@ -8,15 +9,19 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import org.vaadin.addons.componentfactory.PaperSlider;
+import org.vaadin.lineawesome.LineAwesomeIcon;
 
 import java.util.List;
 
-public class AddExercise {
+public class AddExercise extends Div {
     private Div container;
     private Button background;
     private boolean isAddExerciseOpen = false;
+    private Button addExerciseButton;
 
     public AddExercise() {
+        addClassName("add-exercise-wrapper");
+
         this.background = new Button();
 
         this.background.addClassNames("add-exercise-background");
@@ -25,6 +30,9 @@ public class AddExercise {
 
         this.container = new Div();
         this.container.addClassNames("add-exercise");
+
+        createExerciseAddButton();
+
 
         var selectContainer = new Div();
         Select<Exercise> select = new Select<>();
@@ -70,11 +78,12 @@ public class AddExercise {
         exerciseAttributesContainer.addClassNames("exercise-attributes-container");
 
         CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
-        checkboxGroup.setLabel("Working days");
+        checkboxGroup.setLabel("Workout days");
         checkboxGroup.setItems("Monday", "Tuesday", "Wednesday", "Thursday",
                 "Friday", "Saturday", "Sunday");
         checkboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
 
+        var sliderContainer = new Div();
         PaperSlider slider = new PaperSlider();
         slider.setMin(0);
         slider.setMax(10);
@@ -82,10 +91,17 @@ public class AddExercise {
         slider.setPinned(true);
         slider.setSnaps(true);
         slider.setMaxMarkers(1);
+        slider.addClassName("add-exercise__slider");
 
-        this.container.add(selectContainer, exerciseAttributesContainer, checkboxGroup, slider);
+        var submitButton = new Button("Save");
+
+        sliderContainer.add(slider, submitButton);
+        sliderContainer.addClassNames("slider-container");
+
+        this.container.add(selectContainer, exerciseAttributesContainer, checkboxGroup, sliderContainer);
 
         this.background.addClickListener(event -> deactivateAddExercise());
+        add(this.background, this.container, this.addExerciseButton);
     }
 
     public Div getContainer() {
@@ -95,8 +111,6 @@ public class AddExercise {
     public Button getBackground() {
         return this.background;
     }
-
-    public boolean isAddExerciseOpen() {return this.isAddExerciseOpen;}
 
     public void activateAddExercise() {
         this.container.addClassNames("add-exercise--active");
@@ -110,5 +124,24 @@ public class AddExercise {
         this.background.removeClassNames("add-exercise-background--active");
 
         this.isAddExerciseOpen = false;
+    }
+
+    private void createExerciseAddButton() {
+        this.addExerciseButton = new Button();
+        var buttonIcon = LineAwesomeIcon.PLUS_CIRCLE_SOLID.create();
+        buttonIcon.setSize("2.5rem");
+
+        this.addExerciseButton.setIcon(buttonIcon);
+        this.addExerciseButton.addClassNames("table__add-button");
+
+        this.addExerciseButton.addClickListener(this::showAddExerciseView);
+    }
+
+    private void showAddExerciseView(ClickEvent<Button> clickEvent) {
+        if (this.isAddExerciseOpen) {
+            deactivateAddExercise();
+        } else {
+            activateAddExercise();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.application.views.homepage;
 
+import com.example.application.component.AddExercise;
 import com.example.application.component.CalendarTable;
 
 import com.vaadin.flow.component.html.Div;
@@ -15,22 +16,22 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 public class HomeView extends HorizontalLayout {
 
     private CalendarTable calendarTable;
+    private AddExercise addExercise;
 
     public HomeView() {
         var tableWrapper = new Div();
         tableWrapper.addClassNames("table-wrapper");
         this.calendarTable = new CalendarTable();
+        this.addExercise = new AddExercise();
 
         for (var grid : this.calendarTable.createTable()) {
             tableWrapper.add(grid);
         }
 
         var tableView = this.calendarTable.getTableView();
-        var addExerciseContainer = this.calendarTable.getAddExercise().getContainer();
         var addExerciseBackground = this.calendarTable.getAddExercise().getBackground();
-        var button = this.calendarTable.getAddExerciseButton();
 
-        add(tableWrapper, addExerciseContainer, tableView, button, addExerciseBackground);
+        add(tableWrapper, this.addExercise, tableView, addExerciseBackground);
 
         addClassName(LumoUtility.Height.FULL);
     }

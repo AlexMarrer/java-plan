@@ -1,3 +1,9 @@
+.add-exercise-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
 .add-exercise {
     z-index: 1;
     display: none;
@@ -6,6 +12,8 @@
     left: 50%;
     width: calc(90% - 2rem);
     height: calc(90% - 2rem);
+    max-width: 1321px;
+    max-height: 699px;
     transform: translate(-50%, -50%);
     background-color: rgb(31, 31, 31);
     border-radius: 22px;
@@ -19,6 +27,7 @@
             "select" 1fr
             "repsAndSets" 1fr
             "date" 1fr
+            "slider" 1fr
             / 1fr;
     gap: 1rem;
 }
@@ -44,6 +53,19 @@
     grid-area: select;
 }
 
+.slider-container {
+    grid-area: slider;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.add-exercise__slider {
+    width: 50%;
+    max-width: 800px;
+    min-width: 200px;
+}
+
 .exercise-attributes-container vaadin-integer-field,
 .select-container vaadin-select,
 vaadin-checkbox-group::part(label),
@@ -60,4 +82,10 @@ vaadin-checkbox-group::part(group-field) {
 
 vaadin-checkbox::part(label) {
     transform: translateY(10px);
+}
+
+@media screen and (width < 880px ) {
+    vaadin-checkbox-group::part(group-field) {
+        justify-content: unset;
+    }
 }

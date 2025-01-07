@@ -22,7 +22,6 @@ public class CalendarTable {
 
     private Select<TableView> tableView = new Select<>();
     private String standardViewValue = "WEEKLY";
-    private Button addExerciseButton;
     private AddExercise addExercise = new AddExercise();
 
     private List<Grid<Exercise>> dayGrids = new ArrayList<>();
@@ -57,7 +56,6 @@ public class CalendarTable {
             this.standardViewValue = "WEEKLY";
             createTableViewSelection();
         }
-        createExerciseAddButton();
 
         updateTexts();
         setCurrentDate();
@@ -70,10 +68,6 @@ public class CalendarTable {
 
     public Select<TableView> getTableView() {
         return this.tableView;
-    }
-
-    public Button getAddExerciseButton() {
-        return this.addExerciseButton;
     }
 
     public AddExercise getAddExercise() {
@@ -134,25 +128,6 @@ public class CalendarTable {
                     header.addClassName("current-day");
                 }
             });
-        }
-    }
-
-    private void createExerciseAddButton() {
-        this.addExerciseButton = new Button();
-        var buttonIcon = LineAwesomeIcon.PLUS_CIRCLE_SOLID.create();
-        buttonIcon.setSize("2.5rem");
-
-        this.addExerciseButton.setIcon(buttonIcon);
-        this.addExerciseButton.addClassNames("table__add-button");
-
-        this.addExerciseButton.addClickListener(this::showAddExerciseView);
-    }
-
-    private void showAddExerciseView(ClickEvent<Button> clickEvent) {
-        if (this.addExercise.isAddExerciseOpen()) {
-            this.addExercise.deactivateAddExercise();
-        } else {
-            this.addExercise.activateAddExercise();
         }
     }
 
