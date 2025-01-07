@@ -6,26 +6,19 @@ import com.example.application.views.plan.PlanView;
 import com.example.application.views.settings.SettingsView;
 
 import com.example.application.views.workout.WorkoutView;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.SvgIcon;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasElement;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Nav;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Layout;
-import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import org.vaadin.lineawesome.LineAwesomeIcon;
-import com.vaadin.flow.router.RouterLayout;
 
 import java.util.Locale;
 
@@ -34,11 +27,12 @@ import java.util.Locale;
  */
 @Layout
 @AnonymousAllowed
-public class MainLayout extends VerticalLayout implements RouterLayout {
+public class MainLayout extends VerticalLayout implements RouterLayout, BeforeEnterObserver {
 
     private Div content;
     private HasElement contentView;
-
+    private Header header = new Header();
+    private H1 appName = new H1();
     /**
      * A simple navigation item component, based on ListItem element.
      */
@@ -76,8 +70,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         setSpacing(false);
         setMargin(false);
 
-        Header header = (Header) createHeaderContent();
-        header.setWidthFull();
+        createHeaderContent();
+        this.header.setWidthFull();
 
         this.content = new Div();
         this.content.setSizeFull();
@@ -86,21 +80,38 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
 
         Header navbar = (Header) createFooterContent();
         navbar.setWidthFull();
-        add(header, this.content, navbar);
+        add(this.header, this.content, navbar);
 
         expand(this.content);
     }
 
-    private Component createHeaderContent() {
-        Header header = new Header();
-        header.addClassNames(BoxSizing.BORDER, Display.FLEX, FlexDirection.COLUMN, Width.FULL);
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        Class<?> targetView = event.getNavigationTarget();
 
-        var layout = new Div();
-        layout.addClassNames(Display.FLEX, AlignItems.CENTER, Padding.Horizontal.LARGE);
+        // First try to get the PageTitle annotation
+        String currentPageTitle = null;
+        PageTitle titleAnnotation = targetView.getAnnotation(PageTitle.class);
+        if (titleAnnotation != null) {
+            currentPageTitle = titleAnnotation.value();
+        }
 
-        H1 appName = new H1("java-plan");
+        // If no PageTitle annotation exists, use the class name
+        if (currentPageTitle == null || currentPageTitle.isEmpty()) {
+            currentPageTitle = targetView.getSimpleName().replace("View", "");
+        }
+
+        // Update the H1 text
+        appName.setText(currentPageTitle);
+    }
+
+    private void createHeaderContent() {
+        this.header = new Header();
+        this.header.addClassNames(BoxSizing.BORDER, Display.FLEX, FlexDirection.ROW, Width.FULL, JustifyContent.BETWEEN);
+
         appName.addClassNames(Margin.Vertical.MEDIUM, Margin.End.AUTO, FontSize.LARGE);
-        layout.add(appName);
+
+        var tabsLanguageContainer = new Div();
 
         Tabs tabsLanguage = new Tabs();
 
@@ -118,12 +129,15 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
             switchLanguage(language);
         });
 
-        layout.add(tabsLanguage);
+        tabsLanguageContainer.add(this.appName, tabsLanguage);
+        tabsLanguageContainer.addClassName("tabs-language-container");
+        tabsLanguageContainer.addClassNames(Display.FLEX, AlignItems.CENTER);
 
-        header.add(layout);
-        header.addClassName("header");
+        Image logo = new Image("images/bunny-logo.png", "Bunny Logo");
+        logo.setHeight("4rem");
 
-        return header;
+        this.header.add(logo, tabsLanguageContainer);
+        this.header.addClassName("header");
     }
 
     private Component createFooterContent() {
@@ -142,7 +156,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
         }
 
         header.add(nav);
-        header.addClassName("header");
+        header.addClassNames("header", ZIndex.XSMALL);
 
         return header;
     }

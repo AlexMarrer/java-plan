@@ -1,6 +1,4 @@
 .header {
-    Display: flex;
-    justify-content: center;
     height: 4rem;
     background-color: #1F1F1F;
 }

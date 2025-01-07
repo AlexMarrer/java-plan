@@ -4,6 +4,7 @@
 @import url('navbar/navbar.css');
 @import url('account/account.css');
 @import url('add-exercise/add-exercise.css');
+@import url('create-exercise/create-exercise.css');
 
 .main-content {
   position: relative;

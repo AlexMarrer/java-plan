@@ -6,6 +6,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import org.vaadin.addons.componentfactory.PaperSlider;
@@ -19,6 +23,13 @@ public class AddExercise extends Div {
     private boolean isAddExerciseOpen = false;
     private Button addExerciseButton;
 
+    private Select<Exercise> exerciseSelect;
+    private IntegerField setsField;
+    private IntegerField repsField;
+    private CheckboxGroup<String> workoutDaysGroup;
+    private PaperSlider intensitySlider;
+
+
     public AddExercise() {
         addClassName("add-exercise-wrapper");
 
@@ -31,97 +42,39 @@ public class AddExercise extends Div {
         this.container = new Div();
         this.container.addClassNames("add-exercise");
 
+        var header = new Header();
+        header.add(new H2("Add Exercise"));
+        header.addClassName("add-exercise__header");
+
         createExerciseAddButton();
 
 
-        var selectContainer = new Div();
-        Select<Exercise> select = new Select<>();
-        select.setOverlayWidth("350px");
+        Div selectContainer = createSelectContainer();
 
-        List<Exercise> exercises = Exercise.getExercises();
-        select.setLabel("Exercise");
-        select.setItems(exercises);
-        select.setItemLabelGenerator(Exercise::getName);
-        select.setRequiredIndicatorVisible(true);
+        Div exerciseAttributesContainer = createExerciseAttributesContainer();
 
-        selectContainer.add(select);
-        selectContainer.addClassNames("select-container");
+        CheckboxGroup<String> checkboxGroup = createCheckboxGroup();
 
-        var exerciseAttributesContainer = new Div();
-        IntegerField sets = new IntegerField();
-        sets.setLabel("Sets");
-        sets.setHelperText("Min 1 set");
-        sets.setRequiredIndicatorVisible(true);
-        sets.setMin(1);
-        sets.setValue(3);
-        sets.setStepButtonsVisible(true);
+        Div sliderContainer = createSliderContainer();
 
-        sets.setI18n(new IntegerField.IntegerFieldI18n()
-                .setRequiredErrorMessage("Field is required")
-                .setBadInputErrorMessage("Invalid number format")
-                .setMinErrorMessage("Quantity must be at least 1"));
-
-        IntegerField reps = new IntegerField();
-        reps.setLabel("Reps");
-        reps.setHelperText("Min 1 rep");
-        reps.setRequiredIndicatorVisible(true);
-        reps.setMin(1);
-        reps.setValue(12);
-        reps.setStepButtonsVisible(true);
-
-        reps.setI18n(new IntegerField.IntegerFieldI18n()
-                .setRequiredErrorMessage("Field is required")
-                .setBadInputErrorMessage("Invalid number format")
-                .setMinErrorMessage("Quantity must be at least 1"));
-
-        exerciseAttributesContainer.add(sets, reps);
-        exerciseAttributesContainer.addClassNames("exercise-attributes-container");
-
-        CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
-        checkboxGroup.setLabel("Workout days");
-        checkboxGroup.setItems("Monday", "Tuesday", "Wednesday", "Thursday",
-                "Friday", "Saturday", "Sunday");
-        checkboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
-
-        var sliderContainer = new Div();
-        PaperSlider slider = new PaperSlider();
-        slider.setMin(0);
-        slider.setMax(10);
-        slider.setValue(5);
-        slider.setPinned(true);
-        slider.setSnaps(true);
-        slider.setMaxMarkers(1);
-        slider.addClassName("add-exercise__slider");
-
-        var submitButton = new Button("Save");
-
-        sliderContainer.add(slider, submitButton);
-        sliderContainer.addClassNames("slider-container");
-
-        this.container.add(selectContainer, exerciseAttributesContainer, checkboxGroup, sliderContainer);
+        this.container.add(header, selectContainer, exerciseAttributesContainer, checkboxGroup, sliderContainer);
 
         this.background.addClickListener(event -> deactivateAddExercise());
         add(this.background, this.container, this.addExerciseButton);
     }
 
-    public Div getContainer() {
-        return this.container;
-    }
-
-    public Button getBackground() {
-        return this.background;
-    }
-
-    public void activateAddExercise() {
+    private void activateAddExercise() {
         this.container.addClassNames("add-exercise--active");
         this.background.addClassNames("add-exercise-background--active");
+        addClassNames("add-exercise-wrapper--active");
 
         this.isAddExerciseOpen = true;
     }
 
-    public void deactivateAddExercise() {
+    private void deactivateAddExercise() {
         this.container.removeClassNames("add-exercise--active");
         this.background.removeClassNames("add-exercise-background--active");
+        removeClassNames("add-exercise-wrapper--active");
 
         this.isAddExerciseOpen = false;
     }
@@ -135,6 +88,155 @@ public class AddExercise extends Div {
         this.addExerciseButton.addClassNames("table__add-button");
 
         this.addExerciseButton.addClickListener(this::showAddExerciseView);
+    }
+
+    private Div createExerciseAttributesContainer() {
+        var exerciseAttributesContainer = new Div();
+
+        setsField = new IntegerField();
+        setsField.setLabel("Sets");
+        setsField.setHelperText("Min 1 set");
+        setsField.setRequiredIndicatorVisible(true);
+        setsField.setMin(1);
+        setsField.setValue(3);
+        setsField.setStepButtonsVisible(true);
+
+        setsField.setI18n(new IntegerField.IntegerFieldI18n()
+                .setRequiredErrorMessage("Field is required")
+                .setBadInputErrorMessage("Invalid number format")
+                .setMinErrorMessage("Quantity must be at least 1"));
+
+        repsField = new IntegerField();
+        repsField.setLabel("Reps");
+        repsField.setHelperText("Min 1 rep");
+        repsField.setRequiredIndicatorVisible(true);
+        repsField.setMin(1);
+        repsField.setValue(12);
+        repsField.setStepButtonsVisible(true);
+
+        repsField.setI18n(new IntegerField.IntegerFieldI18n()
+                .setRequiredErrorMessage("Field is required")
+                .setBadInputErrorMessage("Invalid number format")
+                .setMinErrorMessage("Quantity must be at least 1"));
+
+        exerciseAttributesContainer.add(setsField, repsField);
+        exerciseAttributesContainer.addClassNames("exercise-attributes-container");
+
+        return exerciseAttributesContainer;
+    }
+
+    private Div createSelectContainer() {
+        var selectContainer = new Div();
+
+        exerciseSelect = new Select<>();
+        exerciseSelect.setOverlayWidth("350px");
+
+        List<Exercise> exercises = Exercise.getExercises();
+        exerciseSelect.setLabel("Exercise");
+        exerciseSelect.setItems(exercises);
+        exerciseSelect.setItemLabelGenerator(Exercise::getName);
+        exerciseSelect.setRequiredIndicatorVisible(true);
+
+        selectContainer.add(exerciseSelect);
+        selectContainer.addClassNames("select-container");
+
+        return selectContainer;
+    }
+
+    private CheckboxGroup<String> createCheckboxGroup() {
+        workoutDaysGroup = new CheckboxGroup<String>();
+
+        workoutDaysGroup.setLabel("Workout days");
+        workoutDaysGroup.setItems("Monday", "Tuesday", "Wednesday", "Thursday",
+                "Friday", "Saturday", "Sunday");
+        workoutDaysGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+
+        return workoutDaysGroup;
+    }
+
+    private Div createSliderContainer() {
+        var sliderContainer = new Div();
+
+        intensitySlider = new PaperSlider();
+        intensitySlider.setMin(0);
+        intensitySlider.setMax(10);
+        intensitySlider.setValue(5);
+        intensitySlider.setPinned(true);
+        intensitySlider.setSnaps(true);
+        intensitySlider.setMaxMarkers(1);
+        intensitySlider.setHelperText("RPE");
+        intensitySlider.addClassName("add-exercise__slider");
+
+        var submitButton = new Button("Save");
+        submitButton.addClickListener(e -> {
+            if (validateInputs()) {
+                Notification notification = Notification.show("Application submitted!");
+                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.setDuration(1000);
+
+                // Felder zurücksetzen
+                resetFields();
+
+                showAddExerciseView(e);
+            } else {
+                Notification notification = Notification.show("Please fill in all required fields!");
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.setDuration(2000);
+            }
+        });
+
+        sliderContainer.add(intensitySlider, submitButton);
+        sliderContainer.addClassNames("slider-container");
+
+        return sliderContainer;
+    }
+
+    private boolean validateInputs() {
+        boolean isValid = true;
+
+        // Validiere Exercise Select
+        if (exerciseSelect.getValue() == null) {
+            exerciseSelect.setInvalid(true);
+            isValid = false;
+        } else {
+            exerciseSelect.setInvalid(false);
+        }
+
+        // Validiere Sets
+        if (setsField.getValue() == null || setsField.getValue() < 1) {
+            setsField.setInvalid(true);
+            isValid = false;
+        } else {
+            setsField.setInvalid(false);
+        }
+
+        // Validiere Reps
+        if (repsField.getValue() == null || repsField.getValue() < 1) {
+            repsField.setInvalid(true);
+            isValid = false;
+        } else {
+            repsField.setInvalid(false);
+        }
+
+        // Validiere Workout Days (mindestens ein Tag ausgewählt)
+        if (workoutDaysGroup.getValue().isEmpty()) {
+            workoutDaysGroup.setInvalid(true);
+            isValid = false;
+        } else {
+            workoutDaysGroup.setInvalid(false);
+        }
+
+        return isValid;
+    }
+
+    private void resetFields() {
+        exerciseSelect.clear();
+        setsField.setValue(3);
+        repsField.setValue(12);
+        workoutDaysGroup.clear();
+        intensitySlider.setValue(5);
     }
 
     private void showAddExerciseView(ClickEvent<Button> clickEvent) {

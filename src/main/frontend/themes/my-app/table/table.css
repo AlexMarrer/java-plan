@@ -19,6 +19,7 @@
 }
 
 .table__add-button {
+    z-index: 1;
     position: absolute;
     right: 2.5rem;
     bottom: 10%;

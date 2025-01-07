@@ -18,6 +18,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 
 @PageTitle("Account")
@@ -48,6 +49,16 @@ public class AccountView extends HorizontalLayout {
         Avatar avatar = new Avatar();
 
         Div info = new Div();
+        info.add(
+                new Paragraph("Name: Max Mustermann"),
+                new Paragraph("Alter: 28"),
+                new Paragraph("Gewicht: 82 kg"),
+                new Paragraph("Trainer: Sarah Schmidt"),
+                new Paragraph("E-Mail: max@example.com"),
+                new Paragraph("ID: MM123456")
+        );
+        info.addClassNames(LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN, LumoUtility.JustifyContent.CENTER, LumoUtility.Padding.MEDIUM);
+
         Div weight = new Div();
 
         chartDiv.addClassNames("account__chart");

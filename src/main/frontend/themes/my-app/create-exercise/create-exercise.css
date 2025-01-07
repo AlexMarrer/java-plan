@@ -1,36 +1,23 @@
-.add-exercise-wrapper {
+.create-exercise-wrapper {
     position: absolute;
     width: 100%;
     height: 100%;
 }
 
-.add-exercise-wrapper--active {
-    z-index: 1;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-.add-exercise {
-    display: none;
+.create-exercise {
+    display: grid;
     position: absolute;
     top: 50%;
     left: 50%;
     width: calc(90% - 2rem);
     height: calc(90% - 2rem);
-    max-width: 1321px;
-    max-height: 699px;
+    max-width: 1021px;
+    max-height: 399px;
     transform: translate(-50%, -50%);
     background-color: rgb(31, 31, 31);
     border-radius: 22px;
     overflow: hidden;
     padding: 1rem;
-
-    box-shadow: 0 0 25px 5px rgb(0 0 0 / 20%);
-}
-
-.add-exercise--active {
-    display: grid;
     grid-template:
             "title" 1fr
             "select" 1fr
@@ -39,19 +26,16 @@
             "slider" 1fr
             / 1fr;
     gap: 1rem;
+
+    box-shadow: 0 0 25px 5px rgb(0 0 0 / 20%);
 }
 
-.add-exercise-background {
-    display: none;
+.create-exercise-background {
     position: fixed;
     background-color: rgb(39 51 72 / 40%);
 }
 
-.add-exercise-background--active {
-    display: block;
-}
-
-.add-exercise__header {
+.create-exercise__header {
     grid-area: title;
     text-align: center;
 }
@@ -67,10 +51,10 @@
     grid-area: select;
 }
 
-.slider-container {
+.create-container {
     grid-area: slider;
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     padding: 0 2rem;
 }
 
