@@ -12,6 +12,7 @@
 }
 
 .add-exercise {
+    z-index: 2;
     display: none;
     position: absolute;
     top: 50%;
