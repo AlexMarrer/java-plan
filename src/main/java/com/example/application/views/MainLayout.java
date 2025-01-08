@@ -208,6 +208,9 @@ public class MainLayout extends VerticalLayout implements RouterLayout, BeforeEn
         if (this.contentView instanceof HomeView) {
             ((HomeView) this.contentView).updateTexts();
         }
+        if (this.contentView instanceof PlanView) {
+            ((PlanView) this.contentView).updateTexts();
+        }
     }
 
     @Override
